@@ -27,6 +27,10 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <nifi.version>1.5.0</nifi.version>
+    </properties>
+
     <modules>
         <module>nifi-melt-model</module>
         <module>nifi-melt-processors</module>
@@ -34,25 +38,13 @@
         <module>nifi-melt-nar</module>
     </modules>
 
-    <!--dependencyManagement>
+    <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.cumpel.nifi</groupId>
-                <artifactId>nifi-melt-model</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.cumpel.nifi</groupId>
-                <artifactId>nifi-melt-processor</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.cumpel.nifi</groupId>
-                <artifactId>nifi-melt-ui</artifactId>
-                <type>war</type>
-                <version>1.0-SNAPSHOT</version>
+                <groupId>org.apache.nifi</groupId>
+                <artifactId>nifi-standard-processors</artifactId>
+                <version>${nifi.version}</version>
             </dependency>
         </dependencies>
-    </dependencyManagement -->
-
+    </dependencyManagement>
 </project>
