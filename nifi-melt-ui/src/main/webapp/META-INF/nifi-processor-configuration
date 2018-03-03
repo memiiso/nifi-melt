@@ -1,0 +1,1 @@
+com.cumpel.nifi.processors.melt.ExtractLoadTransform:${project.groupId}:nifi-melt-nar:${project.version}
