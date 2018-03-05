@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./nifi-web-ui/assets/jquery-ui-dist/jquery-ui.min.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/assets/slickgrid/slick.grid.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/css/slick-nifi-theme.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/js/jquery/modal/jquery.modal.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/js/jquery/combo/jquery.combo.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/assets/qtip2/jquery.qtip.min.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/js/codemirror/lib/codemirror.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/js/codemirror/addon/hint/show-hint.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/js/jquery/nfeditor/jquery.nfeditor.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/js/jquery/nfeditor/languages/nfel.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/fonts/flowfont/flowfont.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/assets/font-awesome/web-fonts-with-css/css/fontawesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/assets/reset-css/reset.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/main.css" type="text/css"/>
+    <link rel="stylesheet" href="./nifi-web-ui/css/common-ui.css" type="text/css"/>
+    <script type="text/javascript" src="./nifi-web-ui/assets/jquery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/jquery.center.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/jquery.each.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/jquery.tab.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/modal/jquery.modal.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/combo/jquery.combo.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/jquery.ellipsis.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/jquery-ui-dist/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/qtip2/jquery.qtip.min.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/JSON2/json2.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/lib/jquery.event.drag-2.3.0.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/plugins/slick.cellrangedecorator.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/plugins/slick.cellrangeselector.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/plugins/slick.cellselectionmodel.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/plugins/slick.rowselectionmodel.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/slick.formatters.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/slick.editors.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/slick.dataview.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/slick.core.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/assets/slickgrid/slick.grid.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/codemirror/lib/codemirror-compressed.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/nf/nf-namespace.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/nf/nf-storage.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/nf/nf-ajax-setup.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/nf/nf-universal-capture.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/nfeditor/languages/nfel.js"></script>
+    <script type="text/javascript" src="./nifi-web-ui/js/jquery/nfeditor/jquery.nfeditor.js"></script>
+    <script type="text/javascript" src="./js/application.js"></script>
+    <title>melt CTAS</title>
+</head>
+
+<body>
+<div id="update-attributes-content">
+    <div id="table-list-panel">
+        <div id="flowfile-policy-container">
+            <span id="selected-flowfile-policy" class="hidden"></span>
+            <div id="flowfile-policy-label" class="large-label">FlowFile Policy</div>
+            <div class="info fas fa-question-circle"
+                 title="Defines the behavior when multiple rules match. Use clone will ensure that each matching rule is executed with a copy of the original flowfile. Use original will execute all matching rules with the original flowfile in the order specified below."></div>
+            <div id="flowfile-policy"></div>
+            <div class="clear"></div>
+        </div>
+        <div id="rule-label-container">
+            <div id="rules-label" class="large-label">Rules</div>
+            <div class="info fas fa-question-circle" title="Click and drag to change the order that rules are evaluated."></div>
+            <button id="new-rule" class="new-rule hidden fa fa-plus"></button>
+            <div class="clear"></div>
+        </div>
+        <div id="table-list-container">
+            <ul id="table-list"></ul>
+        </div>
+        <div id="no-rules" class="unset">No rules found.</div>
+        <div id="rule-filter-controls" class="hidden">
+            <div id="rule-filter-container">
+                <input type="text" placeholder="Filter" id="rule-filter"/>
+                <div id="rule-filter-type"></div>
+            </div>
+            <div id="rule-filter-stats" class="filter-status">
+                Displaying&nbsp;<span id="displayed-rules"></span>&nbsp;of&nbsp;<span id="total-rules"></span>
+            </div>
+        </div>
+    </div>
+    <div id="rule-details-panel">
+        <div id="selected-rule-conditions-container" class="selected-rule-detail">
+            <div class="large-label-container">
+                <div id="conditions-label" class="large-label">Expression</div>
+                <div class="info fa fa-question-circle" title="SQL-Expression that will be executed"></div>
+                <div class="clear"></div>
+            </div>
+            bla
+            <div id="new-sql-expression"></div>
+            <div id="selected-rule-conditions">
+                <div id="new-sql-expression"></div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div id="message-and-save-container">
+    <div id="message"></div>
+    <div id="selected-rule-save" class="button hidden">Save</div>
+</div>
+<div class="clear"></div>
+<div id="glass-pane"></div>
+<div id="ok-dialog" class="small-dialog">
+    <div id="ok-dialog-content" class="dialog-content"></div>
+</div>
+<div id="yes-no-dialog" class="small-dialog">
+    <div id="yes-no-dialog-content" class="dialog-content"></div>
+</div>
+</div>
+</body>
+
+</html>
