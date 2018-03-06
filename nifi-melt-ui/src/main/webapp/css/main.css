@@ -27,13 +27,23 @@ body {
     color: #262626;
 }
 
-#update-attributes-content {
+#melt-ctas-content {
     position: absolute;
-    top: 0;
+    top: 20px;
     right: 0;
     bottom: 0;
     left: 0;
     padding: 5px;
+}
+
+div.code-mirror-editor.trans {
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.CodeMirror {
+    border: 1px solid #eee;
+    height: 40vh;
 }
 
 /* new rule */
@@ -51,7 +61,7 @@ div.new-rule {
     z-index: 1301;
 }
 
-#update-attributes-content .ui-autocomplete {
+#melt-ctas-content .ui-autocomplete {
     max-height: 400px;
     overflow: auto;
     border: 1px solid #aaaaaa;
@@ -59,7 +69,7 @@ div.new-rule {
     border-radius: 0;
 }
 
-#update-attributes-content .ui-menu .ui-menu-item a.ui-state-focus {
+#melt-ctas-content .ui-menu .ui-menu-item a.ui-state-focus {
     background: #D4E0E5 !important;
     border: 1px solid #999999;
     border-radius: 0;
@@ -90,7 +100,7 @@ div.label {
     color: #262626;
 }
 
-#table-list-panel {
+#ctas-database-panel {
     position: absolute;
     top: 5px;
     bottom: 5px;
@@ -113,13 +123,13 @@ div.label {
     margin-bottom: 20px;
 }
 
-#table-list {
+#rule-list {
     list-style-type: none;
     background: #eaeef0;
     padding: 4px 3px 1px 3px;
 }
 
-#table-list li {
+#rule-list li {
     background: #fff;
     border-top: 1px solid #CCDADB;
     border-right: 1px solid #CCDADB;
@@ -133,12 +143,12 @@ div.label {
     line-height: 32px;
     height: 32px;
     padding: 0px 10px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.4);
     margin-bottom: 5px;
     display: flex;
 }
 
-#table-list li.selected {
+#rule-list li.selected {
     background: #355B6A;
     border-top: 1px solid #AAC1CE;
     border-right: 1px solid #85A6B8;
@@ -151,7 +161,7 @@ div.label {
     padding: 0px 10px;
 }
 
-#table-list li.unsaved {
+#rule-list li.unsaved {
     font-weight: bold;
     font-size: 13px;
     cursor: default;
@@ -179,9 +189,13 @@ div.remove-rule {
     margin-top: 10px;
 }
 
-/* rule details panel */
+/* Expression panel */
 
-#rule-details-panel {
+#validate-sql-container {
+    float: right;
+}
+
+#ctas-expression-panel {
     overflow: auto;
     position: absolute;
     top: 5px;
@@ -212,45 +226,12 @@ div.large-label-container {
     right: 0px;
 }
 
-#actions-label {
-    float: left;
-    line-height: 28px;
+#ctas-expression-container {
+    padding-top: 28px;
 }
 
-#selected-rule-conditions {
-    min-height: 800px;
-}
-
-#selected-rule-conditions .rule-setting {
-    cursor: move;
-    padding: 10px;
-    margin-bottom: 10px;
-    height: 200px;
-}
-
-
-#selected-rule-conditions-container {
-    padding-top: 68px;
-}
-
-#selected-rule-conditions-container div.slick-viewport {
+#ctas-expression-container div.slick-viewport {
     overflow-x: hidden !important;
-}
-
-#selected-rule-name {
-    position: absolute;
-    right: 0px;
-    top: 26px;
-}
-
-#new-action {
-    cursor: pointer;
-    position: absolute;
-    right: 0px;
-}
-
-#new-rule {
-    float: right;
 }
 
 #message {
@@ -272,11 +253,6 @@ div.large-label-container {
     left: 0px;
     bottom: 0px;
     display: flex;
-}
-
-#selected-rule-save {
-    margin-right: 20px;
-    margin-top: 10px;
 }
 
 input.editor-text {

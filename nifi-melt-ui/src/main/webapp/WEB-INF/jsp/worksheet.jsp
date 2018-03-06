@@ -13,8 +13,9 @@
     <link rel="stylesheet" href="../nifi/js/jquery/modal/jquery.modal.css" type="text/css"/>
     <link rel="stylesheet" href="../nifi/js/jquery/combo/jquery.combo.css" type="text/css"/>
     <link rel="stylesheet" href="../nifi/assets/qtip2/dist/jquery.qtip.min.css" type="text/css"/>
-    <link rel="stylesheet" href="../nifi/js/codemirror/lib/codemirror.css" type="text/css"/>
-    <link rel="stylesheet" href="../nifi/js/codemirror/addon/hint/show-hint.css" type="text/css"/>
+    <link rel="stylesheet" href="js/CodeMirror/lib/codemirror.css" type="text/css"/>
+    <link rel="stylesheet" href="js/CodeMirror/addon/lint/lint.css" type="text/css">
+    <link rel="stylesheet" href="js/CodeMirror/addon/hint/show-hint.css" type="text/css"/>
     <link rel="stylesheet" href="../nifi/js/jquery/nfeditor/jquery.nfeditor.css" type="text/css"/>
     <link rel="stylesheet" href="../nifi/js/jquery/nfeditor/languages/nfel.css" type="text/css"/>
     <link rel="stylesheet" href="../nifi/fonts/flowfont/flowfont.css" type="text/css"/>
@@ -22,6 +23,7 @@
     <link rel="stylesheet" href="../nifi/assets/reset.css/reset.css" type="text/css"/>
     <link rel="stylesheet" href="css/main.css" type="text/css"/>
     <link rel="stylesheet" href="../nifi/css/common-ui.css" type="text/css"/>
+
     <script type="text/javascript" src="../nifi/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../nifi/js/jquery/jquery.center.js"></script>
     <script type="text/javascript" src="../nifi/js/jquery/jquery.each.js"></script>
@@ -32,24 +34,21 @@
     <script type="text/javascript" src="../nifi/assets/jquery-ui-dist/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../nifi/assets/qtip2/dist/jquery.qtip.min.js"></script>
     <script type="text/javascript" src="../nifi/assets/JSON2/json2.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/lib/jquery.event.drag-2.3.0.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/plugins/slick.cellrangedecorator.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/plugins/slick.cellrangeselector.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/plugins/slick.cellselectionmodel.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/plugins/slick.rowselectionmodel.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/slick.formatters.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/slick.editors.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/slick.dataview.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/slick.core.js"></script>
-    <script type="text/javascript" src="../nifi/assets/slickgrid/slick.grid.js"></script>
+    <script type="text/javascript" src="../nifi/assets/jsonlint/lib/jsonlint.js"></script>
     <script type="text/javascript" src="../nifi/js/codemirror/lib/codemirror-compressed.js"></script>
+    <!--script type="text/javascript" src="js/CodeMirror/src/codemirror.js"></script-->
+    <script type="text/javascript" src="js/CodeMirror/mode/sql/sql.js"></script>
+    <script type="text/javascript" src="js/CodeMirror/addon/lint/lint.js"></script>
+    <script type="text/javascript" src="js/CodeMirror/addon/lint/json-lint.js"></script>
+    <script type="text/javascript" src="js/CodeMirror/addon/hint/show-hint.js"></script>
+    <script type="text/javascript" src="js/CodeMirror/addon/hint/sql-hint.js"></script>
+
     <script type="text/javascript" src="../nifi/js/nf/nf-namespace.js"></script>
     <script type="text/javascript" src="../nifi/js/nf/nf-storage.js"></script>
     <script type="text/javascript" src="../nifi/js/nf/nf-ajax-setup.js"></script>
     <script type="text/javascript" src="../nifi/js/nf/nf-universal-capture.js"></script>
-    <script type="text/javascript" src="../nifi/js/jquery/nfeditor/languages/nfel.js"></script>
-    <script type="text/javascript" src="../nifi/js/jquery/nfeditor/jquery.nfeditor.js"></script>
     <script type="text/javascript" src="js/application.js"></script>
+
     <title>melt CTAS</title>
 </head>
 
@@ -65,64 +64,83 @@
 </div>
 <div id="melt-editable" class="hidden">
     <%=request.getParameter("editable") == null ? "" : org.apache.nifi.util.EscapeUtils.escapeHtml(request.getParameter("editable"))%>
-</div>
-<div id="update-attributes-content">
-    <div id="table-list-panel">
-        <div id="flowfile-policy-container">
-            <span id="selected-flowfile-policy" class="hidden"></span>
-            <div id="flowfile-policy-label" class="large-label">FlowFile Policy</div>
-            <div class="info fa fa-question-circle"
-                 title="Defines the behavior when multiple rules match. Use clone will ensure that each matching rule is executed with a copy of the original flowfile. Use original will execute all matching rules with the original flowfile in the order specified below."></div>
-            <div id="flowfile-policy"></div>
-            <div class="clear"></div>
-        </div>
-        <div id="rule-label-container">
-            <div id="rules-label" class="large-label">Rules</div>
-            <div class="info fa fa-question-circle" title="Click and drag to change the order that rules are evaluated."></div>
-            <button id="new-rule" class="new-rule hidden fa fa-plus"></button>
-            <div class="clear"></div>
-        </div>
-        <div id="table-list-container">
-            <ul id="table-list"></ul>
-        </div>
-        <div id="no-rules" class="unset">No rules found.</div>
-        <div id="rule-filter-controls" class="hidden">
-            <div id="rule-filter-container">
-                <input type="text" placeholder="Filter" id="rule-filter"/>
-                <div id="rule-filter-type"></div>
-            </div>
-            <div id="rule-filter-stats" class="filter-status">
-                Displaying&nbsp;<span id="displayed-rules"></span>&nbsp;of&nbsp;<span id="total-rules"></span>
-            </div>
-        </div>
-    </div>
-    <div id="rule-details-panel">
-        <div id="selected-rule-conditions-container" class="selected-rule-detail">
-            <div class="large-label-container">
-                <div id="conditions-label" class="large-label">Expression</div>
-                <div class="info fa fa-question-circle" title="SQL-Expression that will be executed"></div>
-                <div class="clear"></div>
-            </div>
-            <div id="selected-rule-conditions">
-                <div id="new-sql-expression"></div>
-            </div>
-        </div>
-    </div>
-    <div class="clear"></div>
-</div>
-<div id="message-and-save-container">
-    <div id="message"></div>
-    <div id="selected-rule-save" class="button hidden">Save</div>
-</div>
-<div class="clear"></div>
-<div id="glass-pane"></div>
-<div id="ok-dialog" class="small-dialog">
-    <div id="ok-dialog-content" class="dialog-content"></div>
-</div>
-<div id="yes-no-dialog" class="small-dialog">
-    <div id="yes-no-dialog-content" class="dialog-content"></div>
-</div>
-</div>
+</div><div id="melt-ctas-content">
+              <div id="ctas-database-panel">
+                  <div id="flowfile-policy-container">
+                      <span id="selected-flowfile-policy" class="hidden"></span>
+                      <div id="flowfile-policy-label" class="large-label">Schemas</div>
+                      <div class="info fa fa-question-circle" title="Defines the behavior when multiple rules match."></div>
+                      <div id="flowfile-policy"></div>
+                      <div class="clear"></div>
+                  </div>
+                  <div id="rule-label-container">
+                      <div id="rules-label" class="large-label">Tables</div>
+                      <div class="info fa fa-question-circle" title="List of all the tables in the selected database"></div>
+                      <div class="clear"></div>
+                  </div>
+                  <div id="table-list-container">
+                      <ul id="rule-list"></ul>
+                  </div>
+                  <div id="no-rules" class="unset">No tables foundd.</div>
+              </div>
+              <div id="ctas-expression-panel">
+                  <div id="expression-button-container">
+                      <div id="expression-save" class="button button-normal">Save</div>
+                      <div id="expression-validate" class="button button-normal">Validate</div>
+                      <div class="clear"></div>
+                  </div>
+                  <div id="ctas-expression-container">
+                      <div class="large-label-container">
+                          <div id="conditions-label" class="large-label">New SQL-Expression</div>
+                          <div class="info fa fa-question-circle" title="All conditions must be met for this rule to match."></div>
+                          <div class="clear"></div>
+                      </div>
+                      <div id="ctas-expression-container">
+                          <textarea id="sqlEditor" name="sqlEditor">
+                          create table if not exists table1(
+                            a  bigint(13) not null primary key,
+                            b  char(4)    not null,
+                            c  char(50)   not null,
+                            d  int(9)     not null,
+                          );
+
+                          insert into table1 values (1234567890123, "b", "c", 0);
+
+                          select from_unixtime(a/1000), b, c, min(d) as `using`
+                            from table1 t1
+                            left join table2 t2 using (a)
+                            -- inner join table3 t3 on t3._a = t1.a
+                            join (
+                              select a, b, c
+                              from data
+                            ) as foo on foo.a = t1.a
+
+                            where a &gt; 10
+                            and b like '%foo'
+                            or c = 3.14159
+                            and d &lt; -15.7
+                            order by 1 desc
+                          ;
+
+                          select @total := sum(d) from data;
+                          </textarea>
+                      </div>
+                  </div>
+                  <div class="clear"></div>
+              </div>
+              <div id="message-and-save-container">
+                  <div id="message"></div>
+                  <div id="selected-rule-save" class="button hidden">Save</div>
+              </div>
+              <div class="clear"></div>
+              <div id="glass-pane"></div>
+              <div id="ok-dialog" class="small-dialog">
+                  <div id="ok-dialog-content" class="dialog-content"></div>
+              </div>
+              <div id="yes-no-dialog" class="small-dialog">
+                  <div id="yes-no-dialog-content" class="dialog-content"></div>
+              </div>
+          </div>
 </body>
 
 </html>
