@@ -1,1 +1,0 @@
-com.cumpel.nifi.processors.melt.CTAS:${project.groupId}:nifi-melt-nar:${project.version}
