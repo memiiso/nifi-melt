@@ -1,0 +1,90 @@
+<div layout="column">
+    <div layout="row" layout>
+        <!-- First Column-->
+        <div flex="40">
+            <div layout="column">
+                <!-- Second Rof in First Column-->
+                <div flex>
+                    <md-card>
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-subhead large-label">Schemas</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
+                            <md-input-container>
+                                <label>Select a schema</label>
+                                <md-select ng-model="selectedSchema" aria-label="Select a Schema">
+                                    <md-option ng-repeat="schema in schemas" ng-value="schema">{{ schema.name }}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            <span class="md-subhead large-label">Tables</span>
+                            <md-virtual-repeat-container id="table-list-container">
+                                <p ng-show="!tables.length" class="md-caption">No database selected</p>
+                                <div md-virtual-repeat="table in tables" ng-click="selectTable(table)"
+                                     class="repeated-item" flex>
+                                    <p class="md-caption">{{table.name}}</p>
+                                </div>
+                            </md-virtual-repeat-container>
+                        </md-card-content>
+                    </md-card>
+                </div>
+
+                <!-- Second Rof in First Column-->
+                <div flex>
+                    <md-card>
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-subhead large-label">Definition</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content id="table-definition-container" style="height:140px;overflow-y: auto">
+                            <p ng-show="!selectedTable" class="md-caption">No table selected</p>
+
+                            <div ng-show="selectedTable">
+                                <p class="md-body-1 no-margin-bottom">Table:
+                                    <span class="md-caption md-accent">{{selectedTable}}</span>
+                                </p>
+
+                                <p class="md-body-1 no-margin-bottom">Columns:</p>
+                                <md-list>
+                                    <md-list-item ng-repeat="column in columns"><span class="md-caption md-accent">{{column.name}}: {{column.type}}</span>
+                                    </md-list-item>
+                                </md-list>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Column-->
+        <div flex>
+            <div flex>
+                <p flex class="md-subhead no-margin-bottom large-label">Expression</p>
+                <div layout="row" layout-align="end center">
+                    <button class="primary-button" ng-click="formatEditor(inputEditor)">Format</button>
+                    <button class="primary-button"
+                            ng-click="validateJson(jsonInput,getSpec(transform,jsonSpec),transform)"
+                            ng-disabled="!(jsonSpec)">Validate
+                    </button>
+                </div>
+            </div>
+            <div flex>
+                <div id="specEditor" ui-refresh="true" ng-model="jsonSpec" ui-codemirror="editorProperties"
+                     class="code-mirror-editor {{disableCSS}}">
+                </div>
+            </div>
+            <div flex>
+                <div layout="row" layout-align="end center">
+                    <!--button class="secondary-button" ng-click="formatEditor(inputEditor)">Cancel</button-->
+                    <button class="primary-button"
+                            ng-click="saveSpec(jsonInput,getSpec(transform,jsonSpec),transform,processorId,clientId,revisionId)">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

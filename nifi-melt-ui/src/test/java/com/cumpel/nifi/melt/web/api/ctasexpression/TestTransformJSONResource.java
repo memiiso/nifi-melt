@@ -1,9 +1,9 @@
-package com.cumpel.nifi.melt.web.api.transformjson;
+package com.cumpel.nifi.melt.web.api.ctasexpression;
 
 import com.bazaarvoice.jolt.Diffy;
 import com.bazaarvoice.jolt.JsonUtils;
-import com.cumpel.nifi.melt.web.api.transformjson.dto.JoltSpecificationDTO;
-import com.cumpel.nifi.melt.web.api.transformjson.dto.ValidationDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.JoltSpecificationDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.ValidationDTO;
 import junit.framework.TestCase;
 import org.apache.nifi.web.ComponentDetails;
 import org.apache.nifi.web.NiFiWebConfigurationContext;
@@ -74,7 +74,7 @@ public class TestTransformJSONResource extends JerseyTest {
 
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-chain","[]");
         ValidationDTO validate  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -87,7 +87,7 @@ public class TestTransformJSONResource extends JerseyTest {
     public void testValidateWithValidSpec() {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-remove","{\"rating\": {\"quality\": \"\"} }");
         ValidationDTO validation  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -99,7 +99,7 @@ public class TestTransformJSONResource extends JerseyTest {
     public void testValidateWithValidExpressionLanguageSpec() {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-remove","{\"rating\": {\"${filename}\": \"\"} }");
         ValidationDTO validation  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -111,7 +111,7 @@ public class TestTransformJSONResource extends JerseyTest {
     public void testValidateWithValidEmptySpec() {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-sort","");
         ValidationDTO validation  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -123,7 +123,7 @@ public class TestTransformJSONResource extends JerseyTest {
     public void testValidateWithInvalidEmptySpec() {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-remove","");
         ValidationDTO validation  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -135,7 +135,7 @@ public class TestTransformJSONResource extends JerseyTest {
     public void testValidateWithValidNullSpec() {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-sort",null);
         ValidationDTO validation  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -157,7 +157,7 @@ public class TestTransformJSONResource extends JerseyTest {
         joltSpecificationDTO.setCustomClass("TestCustomJoltTransform");
         joltSpecificationDTO.setModules("src/test/resources/TestTransformJSONResource/TestCustomJoltTransform.jar");
         ValidationDTO validate  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -177,7 +177,7 @@ public class TestTransformJSONResource extends JerseyTest {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-custom","[{ \"operation\": \"default\", \"spec\":{ \"custom-id\" :4 }}]");
         joltSpecificationDTO.setCustomClass("TestCustomJoltTransform");
         ValidationDTO validate  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -199,7 +199,7 @@ public class TestTransformJSONResource extends JerseyTest {
         joltSpecificationDTO.setCustomClass("TestCustomJoltTransform");
         joltSpecificationDTO.setModules("src/test/resources/TestTransformJSONResource/TestCustomJoltTransform.jar");
         ValidationDTO validate  = client().target(getBaseUri())
-                .path("/standard/transformjson/validate")
+                .path("/standard/ctasexpression/validate")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), ValidationDTO.class);
 
@@ -216,7 +216,7 @@ public class TestTransformJSONResource extends JerseyTest {
         joltSpecificationDTO.setCustomClass("TestCustomJoltTransform");
         joltSpecificationDTO.setModules("src/test/resources/TestTransformJSONResource/TestCustomJoltTransform.jar");
         String responseString = client().target(getBaseUri())
-                .path("/standard/transformjson/execute")
+                .path("/standard/ctasexpression/execute")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), String.class);
 
@@ -233,7 +233,7 @@ public class TestTransformJSONResource extends JerseyTest {
         joltSpecificationDTO.setInput(inputJson);
         joltSpecificationDTO.setCustomClass("TestCustomJoltTransform");
         final Response response = client().target(getBaseUri())
-                .path("/standard/transformjson/execute")
+                .path("/standard/ctasexpression/execute")
                 .request()
                 .post(Entity.json(joltSpecificationDTO));
 
@@ -244,7 +244,7 @@ public class TestTransformJSONResource extends JerseyTest {
     public void testExecuteWithInvalidSpec() {
         JoltSpecificationDTO joltSpecificationDTO = new JoltSpecificationDTO("jolt-transform-remove", "{\"rating\": {\"quality\": \"\"} }");
         final Response response = client().target(getBaseUri())
-                .path("/standard/transformjson/execute")
+                .path("/standard/ctasexpression/execute")
                 .request()
                 .post(Entity.json(joltSpecificationDTO));
 
@@ -258,7 +258,7 @@ public class TestTransformJSONResource extends JerseyTest {
         String inputJson = "{\"rating\":{\"quality\":2,\"count\":1}}";
         joltSpecificationDTO.setInput(inputJson);
         String responseString = client().target(getBaseUri())
-                .path("/standard/transformjson/execute")
+                .path("/standard/ctasexpression/execute")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), String.class);
 
@@ -278,7 +278,7 @@ public class TestTransformJSONResource extends JerseyTest {
         attributes.put("qual_var","qa");
         joltSpecificationDTO.setExpressionLanguageAttributes(attributes);
         String responseString = client().target(getBaseUri())
-                .path("/standard/transformjson/execute")
+                .path("/standard/ctasexpression/execute")
                 .request()
                 .post(Entity.json(joltSpecificationDTO), String.class);
 

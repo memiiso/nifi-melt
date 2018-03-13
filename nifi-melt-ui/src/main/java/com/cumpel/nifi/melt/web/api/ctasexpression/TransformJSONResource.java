@@ -1,10 +1,10 @@
-package com.cumpel.nifi.melt.web.api.transformjson;
+package com.cumpel.nifi.melt.web.api.ctasexpression;
 
 import com.bazaarvoice.jolt.JoltTransform;
 import com.bazaarvoice.jolt.JsonUtils;
 import com.cumpel.nifi.melt.web.api.AbstractStandardResource;
-import com.cumpel.nifi.melt.web.api.transformjson.dto.JoltSpecificationDTO;
-import com.cumpel.nifi.melt.web.api.transformjson.dto.ValidationDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.JoltSpecificationDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.ValidationDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.attribute.expression.language.PreparedQuery;
 import org.apache.nifi.attribute.expression.language.Query;
@@ -24,7 +24,7 @@ import java.io.FilenameFilter;
 import java.util.Collections;
 import java.util.Map;
 
-@Path("/standard/transformjson")
+@Path("/standard/ctasexpression")
 public class TransformJSONResource extends AbstractStandardResource {
 
     private static final Logger logger = LoggerFactory.getLogger(TransformJSONResource.class);

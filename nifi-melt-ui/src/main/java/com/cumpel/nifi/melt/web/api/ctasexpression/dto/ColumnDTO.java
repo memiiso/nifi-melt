@@ -1,4 +1,4 @@
-package com.cumpel.nifi.melt.web.api.sqlexpression.dto;
+package com.cumpel.nifi.melt.web.api.ctasexpression.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,22 +1,6 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 'use strict';
 
-var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout, TransformJsonService, ProcessorService, details) {
+var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout, CtasExpressionService, ProcessorService, details) {
 
     $scope.processorId = '';
     $scope.clientId = '';
@@ -34,6 +18,12 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
     $scope.specUpdated = false;
     $scope.variables = {};
     $scope.joltVariables = {};
+
+    $scope.selectedSchema = '';
+    $scope.selectedTable = '';
+    $scope.schemas = [];
+    $scope.tables = [];
+    $scope.columns = [];
 
     $scope.convertToArray= function (map){
         var labelValueArray = [];
@@ -189,7 +179,6 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
             'indent_char': '\t'
         });
         editor.getDoc().setValue(jsonValue);
-
     };
 
     $scope.hasJsonErrors = function(input, transform){
@@ -285,24 +274,6 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
         }
     };
 
-    $scope.getDatabaseInformations = function(){
-        console.log("getDatabaseInformations clicked! ");
-
-        var deferred = $q.defer();
-        $scope.clearError();
-
-        TransformJsonService.getDatabaseInformation().then(function(response){
-            $scope.dbInfos = response.data;
-            deferred.resolve($scope.dbInfos);
-            console.log("Database Infos: ", $scope.dbInfos);
-        }).catch(function(response) {
-            $scope.showError("Error occurred during validation",response.statusText)
-            deferred.reject($scope.error);
-        });
-
-        return deferred.promise;
-    };
-
     $scope.validateJson = function(jsonInput,jsonSpec,transform){
 
         var deferred = $q.defer();
@@ -312,7 +283,7 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
         if( transform == 'jolt-transform-sort' ||!$scope.hasJsonErrors(jsonSpec,transform) ){
             var joltSpec = $scope.getJoltSpec(transform,jsonSpec,jsonInput);
 
-            TransformJsonService.validate(joltSpec).then(function(response){
+            CtasExpressionService.validate(joltSpec).then(function(response){
                 $scope.validObj = response.data;
                 deferred.resolve($scope.validObj);
             }).catch(function(response) {
@@ -342,7 +313,7 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
 
                     var joltSpec = $scope.getJoltSpec(transform,jsonSpec,jsonInput);
 
-                    TransformJsonService.execute(joltSpec).then(function(response){
+                    CtasExpressionService.execute(joltSpec).then(function(response){
 
                             $scope.jsonOutput = js_beautify(response.data, {
                                 'indent_size': 1,
@@ -413,7 +384,7 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
             controller: angular.noop,
             controllerAs: 'dialogCtl',
             bindToController: true,
-            templateUrl: 'app/transformjson/variable-dialog-template.html',
+            templateUrl: 'app/ctasexpression/variable-dialog-template.html',
             targetEvent: ev,
             clickOutsideToClose: false
         });
@@ -427,6 +398,7 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
         $scope.editable = eval(params.editable);
 
         var jsonSpec = $scope.getSpec($scope.transform,$scope.jsonSpec);
+
         if(jsonSpec != null && jsonSpec != ""){
             setTimeout(function(){
                 $scope.$apply(function(){
@@ -434,15 +406,50 @@ var TransformJsonController = function ($scope, $state, $q, $mdDialog, $timeout,
                 });
             });
         }
+
+        $scope.getDatabaseInformations();
     };
 
     $scope.$watch("specEditor", function (newValue, oldValue ) {
-        $scope.toggleEditor(newValue,$scope.transform,false);
+       // $scope.toggleEditor(newValue,$scope.transform,false);
     });
+
+    $scope.$watch('selectedSchema', function (newSchema, oldSchema) {
+        if (newSchema) {
+            $scope.tables = newSchema.tables;
+        }
+    });
+
+    // ---------------
+
+    $scope.selectTable = function (selTable) {
+        $scope.selectedTable = selTable.name;
+        $scope.columns = selTable.columns;
+    }
+
+    $scope.getDatabaseInformations = function(){
+        var deferred = $q.defer();
+        $scope.clearError();
+
+        CtasExpressionService.getDatabaseInformation().then(function(response){
+            $scope.schemas = response.data.schemas;
+            if($scope.schemas && $scope.schemas.length > 0){
+                $scope.selectedSchema = $scope.schemas[0];
+                console.log('selectedSchema: ', $scope.selectedSchema);
+            }
+            console.log('schemas: ', $scope.schemas.schemas);
+            deferred.resolve($scope.schemas);
+        }).catch(function(response) {
+            $scope.showError("Error occurred during validation",response.statusText)
+            deferred.reject($scope.error);
+        });
+
+        return deferred.promise;
+    };
 
     $scope.initController($state.params);
 
 };
 
-TransformJsonController.$inject = ['$scope', '$state', '$q','$mdDialog','$timeout','TransformJsonService', 'ProcessorService','details'];
-angular.module('standardUI').controller('TransformJsonController', TransformJsonController);
+CtasExpressionController.$inject = ['$scope', '$state', '$q','$mdDialog','$timeout','CtasExpressionService', 'ProcessorService','details'];
+angular.module('standardUI').controller('CtasExpressionController', CtasExpressionController);

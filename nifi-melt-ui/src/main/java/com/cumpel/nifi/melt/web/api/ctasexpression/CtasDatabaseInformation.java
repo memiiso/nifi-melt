@@ -1,27 +1,23 @@
-package com.cumpel.nifi.melt.web.api.sqlexpression;
+package com.cumpel.nifi.melt.web.api.ctasexpression;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bazaarvoice.jolt.JsonUtils;
-import com.cumpel.nifi.melt.web.api.sqlexpression.dto.ColumnDTO;
-import com.cumpel.nifi.melt.web.api.sqlexpression.dto.DatabaseDTO;
-import com.cumpel.nifi.melt.web.api.sqlexpression.dto.SchemaDTO;
-import com.cumpel.nifi.melt.web.api.sqlexpression.dto.TableDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.ColumnDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.DatabaseDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.SchemaDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.TableDTO;
 
 @Path("/melt")
-public class GetDatabaseInformation {
+public class CtasDatabaseInformation {
 
-    private static final Logger logger = LoggerFactory.getLogger(GetDatabaseInformation.class);
+    private static final Logger logger = LoggerFactory.getLogger(CtasDatabaseInformation.class);
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })

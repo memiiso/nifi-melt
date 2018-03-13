@@ -1,11 +1,7 @@
-package com.cumpel.nifi.melt.web.api.sqlexpression;
+package com.cumpel.nifi.melt.web.api.ctasexpression;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -18,7 +14,7 @@ import org.junit.Test;
 
 import com.bazaarvoice.jolt.JsonUtils;
 import com.cumpel.nifi.melt.web.api.processor.TestProcessorResource;
-import com.cumpel.nifi.melt.web.api.sqlexpression.dto.DatabaseDTO;
+import com.cumpel.nifi.melt.web.api.ctasexpression.dto.DatabaseDTO;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -30,7 +26,7 @@ public class GetDatabaseInformationTest extends JerseyTest {
     @Override
     protected Application configure() {
         final ResourceConfig config = new ResourceConfig();
-        config.register(GetDatabaseInformation.class);
+        config.register(CtasDatabaseInformation.class);
         config.register(JacksonFeature.class);
         config.register(new AbstractBinder(){
             @Override

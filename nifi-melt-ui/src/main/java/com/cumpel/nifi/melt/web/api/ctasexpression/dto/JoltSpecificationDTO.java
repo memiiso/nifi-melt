@@ -1,4 +1,4 @@
-package com.cumpel.nifi.melt.web.api.transformjson.dto;
+package com.cumpel.nifi.melt.web.api.ctasexpression.dto;
 
 import java.io.Serializable;
 import java.util.Map;

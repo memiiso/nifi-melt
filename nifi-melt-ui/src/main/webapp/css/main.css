@@ -1,29 +1,11 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 body {
     font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
-
-
 div.code-mirror-editor.trans {
     opacity: 0.4;
-    filter: alpha(opacity=40); /* For IE8 and earlier */
+    filter: alpha(opacity=40);
+    /* For IE8 and earlier */
 }
 
 .large-label {
@@ -32,15 +14,40 @@ div.code-mirror-editor.trans {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: bold;
-    padding-bottom: 10px;
+    text-transform: uppercase;
+    padding-bottom: 8px;
     text-overflow: ellipsis;
     float: left;
 }
 
+md-card {
+    margin: 0 !important;
+    box-shadow: none !important;
+}
 
-.CodeMirror {
-    border: 1px solid #eee;
-    height: 40vh;
+md-card md-card-title {
+    padding: 1px 4px !important;
+}
+
+md-card md-card-title md-card-title-text:only-child .md-subhead {
+    padding-top: 8px !important;
+}
+
+md-card md-card-content {
+    padding: 0 4px !important;
+}
+
+md-list-item {
+    padding: 0 4px !important;
+    min-height: 24px !important;
+}
+
+md-list-item .md-button {
+    text-transform: none !important;
+    font-size: 10px;
+    line-height: 26px;
+    min-height: 16px;
+    margin: 0 6px;
 }
 
 .info {
@@ -48,23 +55,22 @@ div.code-mirror-editor.trans {
     font-size: 75%;
 }
 
-
-div.scrollable{
+div.scrollable {
     overflow-x: hidden;
     overflow-y: auto;
     height: 200px;
-    border-color: rgba(0,0,0,0.12);
+    border-color: rgba(0, 0, 0, 0.12);
     border-style: solid;
     border-width: 1px 0 1px 0;
 }
 
-#mainView{
+#mainView {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    padding: 22px;
+    padding: 16px;
 }
 
 #addButton {
@@ -75,7 +81,8 @@ div.scrollable{
     word-wrap: break-word;
 }
 
-.primary-button , .secondary-button {
+.primary-button,
+.secondary-button {
     height: 32px;
     width: 90px;
     padding: 0 8px;
@@ -90,20 +97,20 @@ div.scrollable{
     cursor: pointer;
 }
 
-.primary-button{
+.primary-button {
     background: #728e9b;
 }
 
-.primary-button:hover:not(.disabled-button){
-    background: rgb(0,72,73);
+.primary-button:hover:not(.disabled-button) {
+    background: rgb(0, 72, 73);
 }
 
-.secondary-button{
-    background: rgb(227, 232, 235); color: rgb(0, 72, 73);
-
+.secondary-button {
+    background: rgb(227, 232, 235);
+    color: rgb(0, 72, 73);
 }
 
-.secondary-button:hover:not(.disabled-button){
+.secondary-button:hover:not(.disabled-button) {
     background: rgb(199, 210, 215);
     border-color: rgb(199, 210, 215);
     color: rgb(0, 72, 73);
@@ -114,12 +121,12 @@ button.small-button {
     width: 28px;
 }
 
-div.md-toolbar-tools{
+div.md-toolbar-tools {
     height: 35px;
     padding: 0 0px;
 }
 
-.md-subheader .md-subheader-inner{
+.md-subheader .md-subheader-inner {
     padding: 0px 0px 16px 0px;
 }
 
@@ -127,7 +134,7 @@ md-toolbar {
     min-height: 30px;
 }
 
-md-list-item.md-2-line{
+md-list-item.md-2-line {
     padding: 0px 0px 16px 0px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -158,7 +165,8 @@ button.modal-button {
     color: #262626;
 }
 
-md-dialog .md-actions, md-dialog md-dialog-actions {
+md-dialog .md-actions,
+md-dialog md-dialog-actions {
     padding-right: 0px;
     min-height: 0px;
 }
@@ -166,21 +174,63 @@ md-dialog .md-actions, md-dialog md-dialog-actions {
 md-option {
     height: 32px;
     padding: 0px 10px 0px 10px;
-    background-color:rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
     border-color: rgb(234, 238, 240)
+}
+
+md-input-container {
+    padding: 2px;
+    margin: 4px 0;
+    width: 100%;
 }
 
 md-select .md-select-value {
     font-size: 9pt;
     font-style: normal;
     font-weight: normal;
-    background-color:rgb(234, 238, 240);
+    background-color: rgb(234, 238, 240);
     border-bottom-color: rgb(234, 238, 240);
 }
 
-md-option .md-text{
+md-option .md-text {
     font-size: 9pt;
     font-style: normal;
     font-weight: normal;
     color: rgb(38, 38, 38);
+}
+
+#table-list-container {
+    height: 200px;
+    width: 100%;
+    max-width: 400px;
+}
+
+#table-definition-container {
+    height: 200px;
+    width: 100%;
+    padding-left: 8px
+}
+
+.repeated-item {
+    height: 2em;
+    padding-top: 10px;
+}
+
+.md-virtual-repeat-container .md-virtual-repeat-offsetter div {
+    padding-left: 12px;
+}
+
+.md-body-1 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .010em;
+    line-height: 20px;
+}
+
+.CodeMirror {
+    width: 100%;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0px;
 }
