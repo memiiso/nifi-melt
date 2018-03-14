@@ -50,8 +50,6 @@ public class GetDatabaseInformationTest extends JerseyTest {
                 .get(DatabaseDTO.class);
 
         assertNotNull(databaseDTO);
-        System.out.println(getBaseUri());
-
         System.out.println(JsonUtils.toPrettyJsonString(databaseDTO));
     }
 }

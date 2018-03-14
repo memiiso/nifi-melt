@@ -14,8 +14,8 @@
                         <md-card-content>
                             <md-input-container>
                                 <label>Select a schema</label>
-                                <md-select ng-model="selectedSchema" aria-label="Select a Schema">
-                                    <md-option ng-repeat="schema in schemas" ng-value="schema">{{ schema.name }}
+                                <md-select flex="60" ng-model="selectedSchema" class="md-no-underline">
+                                    <md-option ng-repeat="schema in schemas | orderBy: 'name'" ng-value="schema">{{ schema.name }}
                                     </md-option>
                                 </md-select>
                             </md-input-container>
@@ -43,7 +43,7 @@
                             <p ng-show="!selectedTable" class="md-caption">No table selected</p>
 
                             <div ng-show="selectedTable">
-                                <p class="md-body-1 no-margin-bottom">Table:
+                                <p class="no-margin-bottom"> <span class="md-body-1">Table:</span>
                                     <span class="md-caption md-accent">{{selectedTable}}</span>
                                 </p>
 

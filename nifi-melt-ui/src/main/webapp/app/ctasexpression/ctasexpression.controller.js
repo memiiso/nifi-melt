@@ -417,11 +417,11 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.$watch('selectedSchema', function (newSchema, oldSchema) {
         if (newSchema) {
             $scope.tables = newSchema.tables;
+            $scope.columns = [];
         }
     });
 
     // ---------------
-
     $scope.selectTable = function (selTable) {
         $scope.selectedTable = selTable.name;
         $scope.columns = selTable.columns;

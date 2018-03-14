@@ -213,16 +213,12 @@ md-option .md-text {
 
 .repeated-item {
     height: 2em;
-    padding-top: 10px;
-}
-
-.md-virtual-repeat-container .md-virtual-repeat-offsetter div {
-    padding-left: 12px;
+    padding-top: 8px;
 }
 
 .md-body-1 {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: .010em;
     line-height: 20px;
 }
@@ -232,5 +228,6 @@ md-option .md-text {
 }
 
 .no-margin-bottom {
+    margin-top: 0.8em;
     margin-bottom: 0px;
 }
