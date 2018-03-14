@@ -3,6 +3,7 @@ package com.cumpel.nifi.melt.web.api.ctasexpression;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,7 +26,7 @@ public class CtasDatabaseInformation {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path("/ctas/database")
+    @Path("/ctas/databases")
     public Response getDatabaseInformation() {
 
         logger.info("calling get db infos!");
@@ -63,7 +64,17 @@ public class CtasDatabaseInformation {
         }
 
 
-        return Response.ok(databaseDTO).build();
+        // generate the response
+        final Response.ResponseBuilder response = Response.ok(databaseDTO);
+        return noCache(response).build();
+    }
+
+    private Response.ResponseBuilder noCache(Response.ResponseBuilder response) {
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setPrivate(true);
+        cacheControl.setNoCache(true);
+        cacheControl.setNoStore(true);
+        return response.cacheControl(cacheControl);
     }
 
 }

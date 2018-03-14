@@ -1,12 +1,12 @@
 'use strict';
 
-var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout, CtasExpressionService, ProcessorService, details) {
+var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout, CtasExpressionService, ProcessorService, details, databases) {
 
     $scope.processorId = '';
     $scope.clientId = '';
     $scope.revisionId = '';
     $scope.editable = false;
-    $scope.specEditor = {};
+    $scope.expressEditor = {};
     $scope.inputEditor = {};
     $scope.jsonInput = '';
     $scope.jsonOutput = '';
@@ -15,7 +15,7 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.error = '';
     $scope.disableCSS = '';
     $scope.saveStatus = '';
-    $scope.specUpdated = false;
+    $scope.expressUpdated = false;
     $scope.variables = {};
     $scope.joltVariables = {};
 
@@ -25,121 +25,119 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.tables = [];
     $scope.columns = [];
 
-    $scope.convertToArray= function (map){
+    $scope.convertToArray = function (map) {
         var labelValueArray = [];
-        angular.forEach(map, function(value, key){
-            labelValueArray.push({'label' :  value, 'value' : key});
+        angular.forEach(map, function (value, key) {
+            labelValueArray.push({'label': value, 'value': key});
         });
         return labelValueArray;
     };
 
-    $scope.getJsonSpec = function(details){
-        if(details['properties']['jolt-spec'] != null && details['properties']['jolt-spec'] != "") {
-            return details['properties']['jolt-spec'];
+    // Details:
+    console.log(details);
+
+    // SB-Infos:
+    console.log(databases);
+
+    $scope.getCtasExpression = function (details) {
+        if (details['properties']['ctas-expression'] != null && details['properties']['ctas-expression'] != "") {
+            return details['properties']['ctas-expression'];
         }
         else return '';
     };
 
-    $scope.getTransform = function(details){
-        return details['properties']['jolt-transform'] ? details['properties']['jolt-transform'] :
-            details['descriptors']['jolt-transform']['defaultValue'] ;
-    };
-
-    $scope.getCustomClass = function(details){
-        if(details['properties']['jolt-custom-class'] != null && details['properties']['jolt-custom-class'] != "") {
+    $scope.getCustomClass = function (details) {
+        if (details['properties']['jolt-custom-class'] != null && details['properties']['jolt-custom-class'] != "") {
             return details['properties']['jolt-custom-class'];
         }
         else return '';
     };
 
-    $scope.getCustomModules = function(details){
-        if(details['properties']['jolt-custom-modules'] != null && details['properties']['jolt-custom-modules'] != "") {
+    $scope.getCustomModules = function (details) {
+        if (details['properties']['jolt-custom-modules'] != null && details['properties']['jolt-custom-modules'] != "") {
             return details['properties']['jolt-custom-modules'];
         }
         else return '';
     };
 
-    $scope.getTransformOptions = function(details){
-        return $scope.convertToArray(details['descriptors']['jolt-transform']['allowableValues']);
-    };
-
-    $scope.populateScopeWithDetails = function(details){
-        $scope.jsonSpec = $scope.getJsonSpec(details);
-        $scope.transform = $scope.getTransform(details);
-        $scope.transformOptions = $scope.getTransformOptions(details);
+    $scope.populateScopeWithDetails = function (details) {
+        $scope.sqlExpression = $scope.getCtasExpression(details);
         $scope.customClass = $scope.getCustomClass(details);
         $scope.modules = $scope.getCustomModules(details);
     };
 
-  //  $scope.populateScopeWithDetails(details.data);
+    $scope.populateScopeWithDetails(details.data);
 
-    $scope.clearValidation = function(){
+    $scope.setDatabaseInfos = function (database) {
+        $scope.schemas = database.schemas;
+        if ($scope.schemas && $scope.schemas.length > 0) {
+            $scope.selectedSchema = $scope.schemas[0];
+        }
+    };
+
+    $scope.setDatabaseInfos(databases.data);
+
+    $scope.clearValidation = function () {
         $scope.validObj = {};
     };
 
-    $scope.clearError = function(){
+    $scope.clearError = function () {
         $scope.error = '';
     };
 
-    $scope.clearSave = function(){
-        if($scope.saveStatus != ''){
+    $scope.clearSave = function () {
+        if ($scope.saveStatus != '') {
             $scope.saveStatus = '';
         }
     };
 
-    $scope.clearMessages = function(){
+    $scope.clearMessages = function () {
         $scope.clearSave();
         $scope.clearError();
         $scope.clearValidation();
     };
 
-    $scope.showError = function(message,detail){
+    $scope.showError = function (message, detail) {
         $scope.error = message;
         console.log('Error received:', detail);
     };
 
-    $scope.initEditors = function(_editor) {
-
-        _editor.setOption('extraKeys',{
-
-            'Shift-F': function(cm){
+    $scope.initEditors = function (_editor) {
+        _editor.setOption('extraKeys', {
+            'Shift-F': function (cm) {
                 var jsonValue = js_beautify(cm.getDoc().getValue(), {
                     'indent_size': 1,
                     'indent_char': '\t'
                 });
                 cm.getDoc().setValue(jsonValue)
             }
-
         });
-
     };
 
-    $scope.initSpecEditor = function(_editor){
+    $scope.initSpecEditor = function (_editor) {
         $scope.initEditors(_editor);
         $scope.specEditor = _editor;
-        _editor.on('update',function(cm){
-            if($scope.transform == 'jolt-transform-sort'){
-                $scope.toggleEditorErrors(_editor,'hide');
+        _editor.on('update', function (cm) {
+            if ($scope.transform == 'jolt-transform-sort') {
+                $scope.toggleEditorErrors(_editor, 'hide');
             }
         });
 
-        _editor.on('change',function(cm,changeObj){
-
-            if(!($scope.transform == 'jolt-transform-sort' && changeObj.text.toString() == "")){
+        _editor.on('change', function (cm, changeObj) {
+            if (!($scope.transform == 'jolt-transform-sort' && changeObj.text.toString() == "")) {
                 $scope.clearMessages();
-                if(changeObj.text.toString() != changeObj.removed.toString()){
+                if (changeObj.text.toString() != changeObj.removed.toString()) {
                     $scope.specUpdated = true;
                 }
             }
         });
-
     };
 
-    $scope.initInputEditor = function(_editor){
+    $scope.initInputEditor = function (_editor) {
         $scope.initEditors(_editor);
         $scope.inputEditor = _editor;
 
-        _editor.on('change',function(cm,changeObj){
+        _editor.on('change', function (cm, changeObj) {
             $scope.clearMessages();
         });
 
@@ -172,7 +170,7 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
         readOnly: true
     };
 
-    $scope.formatEditor = function(editor){
+    $scope.formatEditor = function (editor) {
 
         var jsonValue = js_beautify(editor.getDoc().getValue(), {
             'indent_size': 1,
@@ -181,203 +179,177 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
         editor.getDoc().setValue(jsonValue);
     };
 
-    $scope.hasJsonErrors = function(input, transform){
-        try{
+    $scope.hasJsonErrors = function (input, transform) {
+        try {
             jsonlint.parse(input);
-        }catch(e){
+        } catch (e) {
             return true;
         }
         return false;
     };
 
-    $scope.toggleEditorErrors = function(editor,toggle){
+    $scope.toggleEditorErrors = function (editor, toggle) {
         var display = editor.display.wrapper;
         var errors = display.getElementsByClassName("CodeMirror-lint-marker-error");
 
-        if(toggle == 'hide'){
-
-            angular.forEach(errors,function(error){
+        if (toggle == 'hide') {
+            angular.forEach(errors, function (error) {
                 var element = angular.element(error);
                 element.addClass('hide');
             });
 
             var markErrors = display.getElementsByClassName("CodeMirror-lint-mark-error");
-            angular.forEach(markErrors,function(error){
+            angular.forEach(markErrors, function (error) {
                 var element = angular.element(error);
                 element.addClass('CodeMirror-lint-mark-error-hide');
                 element.removeClass('CodeMirror-lint-mark-error');
             });
-
-        }else{
-
-            angular.forEach(errors,function(error){
+        } else {
+            angular.forEach(errors, function (error) {
                 var element = angular.element(error);
                 element.removeClass('hide');
             });
 
             var markErrors = display.getElementsByClassName("CodeMirror-lint-mark-error-hide");
-            angular.forEach(markErrors,function(error){
+            angular.forEach(markErrors, function (error) {
                 var element = angular.element(error);
                 element.addClass('CodeMirror-lint-mark-error');
                 element.removeClass('CodeMirror-lint-mark-error-hide');
             });
-
         }
-
     };
 
-    $scope.toggleEditor = function(editor,transform,specUpdated){
+    $scope.toggleEditor = function (editor, transform, specUpdated) {
 
-        if(transform == 'jolt-transform-sort'){
-            editor.setOption("readOnly","nocursor");
+        if (transform == 'jolt-transform-sort') {
+            editor.setOption("readOnly", "nocursor");
             $scope.disableCSS = "trans";
-            $scope.toggleEditorErrors(editor,'hide');
+            $scope.toggleEditorErrors(editor, 'hide');
         }
-        else{
-            editor.setOption("readOnly",false);
+        else {
+            editor.setOption("readOnly", false);
             $scope.disableCSS = "";
-            $scope.toggleEditorErrors(editor,'show');
+            $scope.toggleEditorErrors(editor, 'show');
         }
 
         $scope.specUpdated = specUpdated;
 
         $scope.clearMessages();
 
-    }
-
-    $scope.getJoltSpec = function(transform,jsonSpec,jsonInput){
-
-        return  {
-            "transform": transform,
-            "specification" : jsonSpec,
-            "input" : jsonInput,
-            "customClass" : $scope.customClass,
-            "modules": $scope.modules,
-            "expressionLanguageAttributes":$scope.joltVariables
-        };
     };
 
-    $scope.getProperties = function(transform,jsonSpec){
+    $scope.getJoltSpec = function (transform, jsonSpec, jsonInput) {
 
         return {
-            "jolt-transform" : transform != "" ? transform : null,
-            "jolt-spec": jsonSpec != "" ? jsonSpec : null
+            "transform": transform,
+            "specification": jsonSpec,
+            "input": jsonInput,
+            "customClass": $scope.customClass,
+            "modules": $scope.modules,
+            "expressionLanguageAttributes": $scope.joltVariables
         };
-
     };
 
-    $scope.getSpec = function(transform,jsonSpec){
-        if(transform != 'jolt-transform-sort'){
+    $scope.getProperties = function (transform, jsonSpec) {
+
+        return {
+            "jolt-transform": transform != "" ? transform : null,
+            "jolt-spec": jsonSpec != "" ? jsonSpec : null
+        };
+    };
+
+    $scope.getSpec = function (transform, jsonSpec) {
+        if (transform != 'jolt-transform-sort') {
             return jsonSpec;
-        }else{
+        } else {
             return null;
         }
     };
 
-    $scope.validateJson = function(jsonInput,jsonSpec,transform){
+    $scope.validateJson = function (jsonInput, jsonSpec, transform) {
 
         var deferred = $q.defer();
-
         $scope.clearError();
-
-        if( transform == 'jolt-transform-sort' ||!$scope.hasJsonErrors(jsonSpec,transform) ){
-            var joltSpec = $scope.getJoltSpec(transform,jsonSpec,jsonInput);
-
-            CtasExpressionService.validate(joltSpec).then(function(response){
+        if (transform == 'jolt-transform-sort' || !$scope.hasJsonErrors(jsonSpec, transform)) {
+            var joltSpec = $scope.getJoltSpec(transform, jsonSpec, jsonInput);
+            CtasExpressionService.validate(joltSpec).then(function (response) {
                 $scope.validObj = response.data;
                 deferred.resolve($scope.validObj);
-            }).catch(function(response) {
-                $scope.showError("Error occurred during validation",response.statusText)
+            }).catch(function (response) {
+                $scope.showError("Error occurred during validation", response.statusText)
                 deferred.reject($scope.error);
             });
 
-        }else{
-            $scope.validObj = {"valid":false,"message":"JSON Spec provided is not valid JSON format"};
+        } else {
+            $scope.validObj = {"valid": false, "message": "JSON Spec provided is not valid JSON format"};
             deferred.resolve($scope.validObj);
         }
 
         return deferred.promise;
-
     };
 
-    $scope.transformJson = function(jsonInput,jsonSpec,transform){
-
-
-        if( !$scope.hasJsonErrors(jsonInput,transform) ){
-
-            $scope.validateJson(jsonInput,jsonSpec,transform).then(function(response){
-
+    $scope.transformJson = function (jsonInput, jsonSpec, transform) {
+        if (!$scope.hasJsonErrors(jsonInput, transform)) {
+            $scope.validateJson(jsonInput, jsonSpec, transform).then(function (response) {
                 var validObj = response;
-
-                if(validObj.valid == true){
-
-                    var joltSpec = $scope.getJoltSpec(transform,jsonSpec,jsonInput);
-
-                    CtasExpressionService.execute(joltSpec).then(function(response){
-
-                            $scope.jsonOutput = js_beautify(response.data, {
-                                'indent_size': 1,
-                                'indent_char': '\t'
-                            });
-
-                        })
-                        .catch(function(response) {
-                            $scope.showError("Error occurred during transformation",response.statusText)
+                if (validObj.valid == true) {
+                    var joltSpec = $scope.getJoltSpec(transform, jsonSpec, jsonInput);
+                    CtasExpressionService.execute(joltSpec).then(function (response) {
+                        $scope.jsonOutput = js_beautify(response.data, {
+                            'indent_size': 1,
+                            'indent_char': '\t'
                         });
-
+                    })
+                        .catch(function (response) {
+                            $scope.showError("Error occurred during transformation", response.statusText)
+                        });
                 }
-
             });
-
-        }else{
-            $scope.validObj = {"valid":false,"message":"JSON Input provided is not valid JSON format"};
+        } else {
+            $scope.validObj = {"valid": false, "message": "JSON Input provided is not valid JSON format"};
         }
     };
 
-    $scope.saveSpec = function(jsonInput,jsonSpec,transform,processorId,clientId,revisionId){
-
+    $scope.saveExpression = function (ctasExpression, processorId, clientId, revisionId) {
         $scope.clearError();
-
-        var properties = $scope.getProperties(transform,jsonSpec);
-
-        ProcessorService.setProperties(processorId,revisionId,clientId,properties)
-            .then(function(response) {
+        var properties = $scope.getProperties(transform, jsonSpec);
+        ProcessorService.setProperties(processorId, revisionId, clientId, properties)
+            .then(function (response) {
                 var details = response.data;
                 $scope.populateScopeWithDetails(details);
                 $scope.saveStatus = "Changes saved successfully";
                 $scope.specUpdated = false;
             })
-            .catch(function(response) {
-                $scope.showError("Error occurred during save properties",response.statusText);
+            .catch(function (response) {
+                $scope.showError("Error occurred during save properties", response.statusText);
             });
-
     };
 
-    $scope.addVariable = function(variables,key,value){
-        if(key != '' && value != ''){
+    $scope.addVariable = function (variables, key, value) {
+        if (key != '' && value != '') {
             variables[key] = value;
         }
 
-        $timeout(function() {
+        $timeout(function () {
             var scroller = document.getElementById("variableList");
             scroller.scrollTop = scroller.scrollHeight;
         }, 0, false);
     }
 
-    $scope.deleteVariable = function(variables,key){
+    $scope.deleteVariable = function (variables, key) {
         delete variables[key];
     }
 
-    $scope.saveVariables = function(variables){
-        angular.copy($scope.variables,$scope.joltVariables);
+    $scope.saveVariables = function (variables) {
+        angular.copy($scope.variables, $scope.joltVariables);
         $scope.cancelDialog();
     }
 
-    $scope.cancelDialog = function(){
+    $scope.cancelDialog = function () {
         $mdDialog.cancel();
     }
 
-    $scope.showVariableDialog = function(ev) {
+    $scope.showVariableDialog = function (ev) {
         angular.copy($scope.joltVariables, $scope.variables);
         $mdDialog.show({
             locals: {parent: $scope},
@@ -388,35 +360,36 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
             targetEvent: ev,
             clickOutsideToClose: false
         });
-
     };
 
-    $scope.initController = function(params){
+    $scope.initController = function (params) {
+        console.log('init pararms: ', params);
         $scope.processorId = params.id;
         $scope.clientId = params.clientId;
         $scope.revisionId = params.revision;
         $scope.editable = eval(params.editable);
 
-        var jsonSpec = $scope.getSpec($scope.transform,$scope.jsonSpec);
+        var jsonSpec = $scope.getSpec($scope.transform, $scope.jsonSpec);
 
-        if(jsonSpec != null && jsonSpec != ""){
-            setTimeout(function(){
-                $scope.$apply(function(){
-                    $scope.validateJson($scope.jsonInput,jsonSpec,$scope.transform);
+        if (jsonSpec != null && jsonSpec != "") {
+            setTimeout(function () {
+                $scope.$apply(function () {
+                    $scope.validateJson($scope.jsonInput, jsonSpec, $scope.transform);
                 });
             });
         }
-
-        $scope.getDatabaseInformations();
     };
 
-    $scope.$watch("specEditor", function (newValue, oldValue ) {
-       // $scope.toggleEditor(newValue,$scope.transform,false);
+    $scope.$watch("specEditor", function (newValue, oldValue) {
+        // $scope.toggleEditor(newValue,$scope.transform,false);
     });
 
     $scope.$watch('selectedSchema', function (newSchema, oldSchema) {
-        if (newSchema) {
-            $scope.tables = newSchema.tables;
+        var tables = newSchema.tables;
+        $scope.selectedTable = '';
+
+        if (tables != null) {
+            $scope.tables = tables;
             $scope.columns = [];
         }
     });
@@ -424,32 +397,14 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     // ---------------
     $scope.selectTable = function (selTable) {
         $scope.selectedTable = selTable.name;
-        $scope.columns = selTable.columns;
-    }
-
-    $scope.getDatabaseInformations = function(){
-        var deferred = $q.defer();
-        $scope.clearError();
-
-        CtasExpressionService.getDatabaseInformation().then(function(response){
-            $scope.schemas = response.data.schemas;
-            if($scope.schemas && $scope.schemas.length > 0){
-                $scope.selectedSchema = $scope.schemas[0];
-                console.log('selectedSchema: ', $scope.selectedSchema);
-            }
-            console.log('schemas: ', $scope.schemas.schemas);
-            deferred.resolve($scope.schemas);
-        }).catch(function(response) {
-            $scope.showError("Error occurred during validation",response.statusText)
-            deferred.reject($scope.error);
-        });
-
-        return deferred.promise;
+        var columns = selTable.columns;
+        if (columns != null) {
+            $scope.columns = columns;
+        }
     };
 
     $scope.initController($state.params);
-
 };
 
-CtasExpressionController.$inject = ['$scope', '$state', '$q','$mdDialog','$timeout','CtasExpressionService', 'ProcessorService','details'];
+CtasExpressionController.$inject = ['$scope', '$state', '$q', '$mdDialog', '$timeout', 'CtasExpressionService', 'ProcessorService', 'details', 'databases'];
 angular.module('standardUI').controller('CtasExpressionController', CtasExpressionController);

@@ -5,7 +5,7 @@ var CtasExpressionService = function CtasExpressionService($http) {
     return  {
         'validate': validate,
         'execute' : execute,
-        'getDatabaseInformation': getDatabaseInformation
+        'getCtasDatabase': getDatabaseInformations
     };
 
 
@@ -20,12 +20,10 @@ var CtasExpressionService = function CtasExpressionService($http) {
             }]});
     }
 
-    function getDatabaseInformation() {
-        return $http({ url:'api/melt/ctas/database',method:'GET'});
+    function getDatabaseInformations() {
+        return $http({ url:'api/melt/ctas/databases',method:'GET'});
     }
-
 };
 
 CtasExpressionService.$inject = ['$http'];
-
 angular.module('standardUI').factory('CtasExpressionService', CtasExpressionService);

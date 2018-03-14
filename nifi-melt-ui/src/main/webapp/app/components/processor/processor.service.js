@@ -2,12 +2,11 @@
 
 var ProcessorService =  function ProcessorService($http) {
 
-    console.log("Logging from ProcessorService");
-
     return  {
         'setProperties': setProperties,
         'getType': getType,
-        'getDetails' : getDetails
+        'getDetails' : getDetails,
+        'getCtasDatabase': getDatabaseInformations
     };
 
     function setProperties(processorId,revisionId,clientId,properties){
@@ -21,7 +20,7 @@ var ProcessorService =  function ProcessorService($http) {
             method: 'GET',
             transformResponse: [function (data) {
                 var obj = JSON.parse(data)
-                var type = obj['type'];
+                var type = obj['type']; //com.cumpel.nifi.melt.processors.CTAS
                 return type;
             }]
         });
@@ -31,8 +30,10 @@ var ProcessorService =  function ProcessorService($http) {
         return $http({ url: 'api/standard/processor/details?processorId=' + id, method: 'GET'});
     }
 
+    function getDatabaseInformations() {
+        return $http({ url:'api/melt/ctas/databases',method:'GET'});
+    }
 };
 
 ProcessorService.$inject = ['$http'];
-
 angular.module('standardUI').factory('ProcessorService', ProcessorService);

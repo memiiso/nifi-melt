@@ -45,7 +45,7 @@ public class GetDatabaseInformationTest extends JerseyTest {
     @Test
     public void testGetDatabaseInformation() {
         DatabaseDTO databaseDTO  = client().target(getBaseUri())
-                .path("/melt/ctas/database")
+                .path("/melt/ctas/databases")
                 .request()
                 .get(DatabaseDTO.class);
 

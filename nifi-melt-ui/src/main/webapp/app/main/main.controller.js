@@ -2,19 +2,14 @@
 
 var MainController = function ($scope, $state, ProcessorService) {
 
-    console.log("MainController initialization");
-
+    //Got to state wich has a same name with the processor
     ProcessorService.getType($state.params.id).then(function(response){
-        var type = response.data;
-        console.log(type);
-        var stateName = type.substring(type.lastIndexOf(".") + 1, type.length).toLowerCase();
+        var type = response.data; //com.cumpel.nifi.melt.processors.CTAS
+        var stateName = type.substring(type.lastIndexOf(".") + 1, type.length).toLowerCase(); //ctas
         var result = $state.go(stateName,$state.params);
-
     }).catch(function(response) {
-        console.log('go error page');
         $state.go('error');
     });
-
 };
 
 MainController.$inject = ['$scope','$state','ProcessorService'];

@@ -56,6 +56,7 @@ public class TestCTAS {
     @Before
     public void init() {
         testRunner = TestRunners.newTestRunner(CTAS.class);
+        testRunner.setValidateExpressionUsage(false);
         try {
             System.setProperty("derby.stream.error.file", "target/derby.log");
             final File tempDir = folder.getRoot();
@@ -84,7 +85,7 @@ public class TestCTAS {
     
     @Test
     public void testSimpleCTASStatement() throws InitializationException, ProcessException, SQLException, IOException {
-        testRunner.setProperty(CTAS.SQL_CTAS_STATEMENT, "select 'Mark' as stringcol, current_date as current_datecoll, '123' as integercoll from PERSONS ");
+        testRunner.setProperty(CTAS.CTAS_SQL_EXPRESSION, "select 'Mark' as stringcol, current_date as current_datecoll, '123' as integercoll from PERSONS ");
         testRunner.setProperty(CTAS.SQL_CTAS_TABLE, " stg.stg_testctastable ");
         //testRunner.enqueue("INSERT INTO PERSONS (ID, NAME, CODE) VALUES (1, 'Mark', 84)".getBytes());
 	    	testRunner.run();
