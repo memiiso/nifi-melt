@@ -13,7 +13,7 @@
                         </md-card-title>
                         <md-card-content>
                             <md-input-container>
-                                <md-select flex="80" ng-model="selectedSchema" class="md-no-underline">
+                                <md-select flex="80" ng-model="selectedSchema" aria-label="Select a database" class="md-no-underline">
                                     <md-option ng-repeat="schema in schemas | orderBy: 'name'" ng-value="schema">{{ schema.name }}
                                     </md-option>
                                 </md-select>
@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div flex>
-                <div id="expressEditor" ui-refresh="true" ng-model="sqlExpression" ui-codemirror="editorProperties"
+                <div id="expressEditor" ui-refresh="true" ng-model="ctasExpression" ui-codemirror="editorProperties"
                      class="code-mirror-editor {{disableCSS}}">
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     <span ng-show="saveStatus && !error" class="info">{{saveStatus}}</span>
                    
                     <button class="primary-button"
-                            ng-click="saveExpression(sqlExpression,processorId,clientId,revisionId)">
+                            ng-click="saveCtasExpression(ctasExpression,processorId,clientId,revisionId)">
                         Save
                     </button>
                 </div>

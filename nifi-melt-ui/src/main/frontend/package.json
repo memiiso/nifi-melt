@@ -1,5 +1,5 @@
 {
-  "name": "nifi-jolt-transform-json-ui",
+  "name": "nifi-melt-ctas-ui",
   "dependencies": {
     "angular-ui-codemirror": "^0.3.0",
     "angular-ui-router": "^0.2.18"
