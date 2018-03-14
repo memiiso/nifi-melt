@@ -100,6 +100,13 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.initCtasEditor = function (_editor) {
         $scope.initEditors(_editor);
         $scope.ctasEditor = _editor;
+
+        _editor.on('change',function(cm,changeObj){
+            $scope.clearMessages();
+        });
+
+        _editor.clearGutter('CodeMirror-lint-markers');
+/*
         _editor.on('update', function (cm) {
             if ($scope.transform == 'jolt-transform-sort') {
                 $scope.toggleEditorErrors(_editor, 'hide');
@@ -113,24 +120,26 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
                     $scope.specUpdated = true;
                 }
             }
-        });
+        }); */
     };
 
     $scope.editorProperties = {
+        indentWithTabs: true,
+        smartIndent: true,
         lineNumbers: true,
+        matchBrackets : true,
+        autofocus: true,
+        extraKeys: {"Ctrl-Space": "autocomplete"},
         gutters: ['CodeMirror-lint-markers'],
-        mode: 'application/json',
+        mode: 'text/x-sql',
         lint: true,
         value: $scope.ctasExpression,
         onLoad: $scope.initCtasEditor
     };
 
     $scope.formatEditor = function (editor) {
-        var jsonValue = js_beautify(editor.getDoc().getValue(), {
-            'indent_size': 1,
-            'indent_char': '\t'
-        });
-        editor.getDoc().setValue(jsonValue);
+        var sqlValue = sqlFormatter.format(editor.getDoc().getValue());
+        editor.getDoc().setValue(sqlValue);
     };
 
     $scope.hasJsonErrors = function (input, transform) {

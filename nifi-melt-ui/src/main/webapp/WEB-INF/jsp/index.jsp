@@ -20,6 +20,7 @@
 <script type="text/javascript" src="../nifi/js/codemirror/lib/codemirror-compressed.js"></script>
 <script type="text/javascript" src="../nifi/js/codemirror/addon/lint/lint.js"></script>
 <script type="text/javascript" src="../nifi/js/codemirror/addon/lint/json-lint.js"></script>
+<script type="text/javascript" src="js/CodeMirror/mode/sql/sql.js"></script>
 <script type="text/javascript" src="../nifi/js/nf/nf-namespace.js"></script>
 <script type="text/javascript" src="../nifi/js/nf/nf-storage.js"></script>
 <script type="text/javascript" src="../nifi/assets/angular/angular.min.js"></script>
@@ -31,6 +32,9 @@
 <!--Bower Libraries-->
 <script type="text/javascript" src="assets/angular-ui-codemirror/src/ui-codemirror.js"></script>
 <script type="text/javascript" src="assets/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+<!--SQL Formatter-->
+<script type="text/javascript" src="assets/sql-formatter/dist/sql-formatter.min.js"></script>
 
 <!--Local Libraries-->
 <script type="text/javascript" src="js/js-beautify/beautify.js"></script>
