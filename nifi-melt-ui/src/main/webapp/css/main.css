@@ -10,7 +10,7 @@ div.code-mirror-editor.trans {
 
 .large-label {
     color: #728e9b;
-    font-size: 12pt;
+    font-size: 12pt !important;
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: bold;
@@ -69,7 +69,7 @@ div.scrollable {
     right: 0;
     bottom: 0;
     left: 0;
-    padding: 16px;
+    padding: 0 16px;
 }
 
 #addButton {
@@ -227,7 +227,7 @@ md-option .md-text {
 }
 
 .no-margin-bottom {
-    margin-top: 0.8em;
+    margin-top: 8px;
     margin-bottom: 0px;
 }
 
@@ -250,6 +250,7 @@ md-list {
 
 .table-list md-list-item .md-button {
     margin: 0 !important;
+    padding: 0 8px;
     font-size: 12px;
 }
 

@@ -56,15 +56,17 @@ public class CTAS extends AbstractProcessor {
             .description("SQL query execution failed. Incoming FlowFile will be penalized and routed to this relationship").build();
     private final Set<Relationship> relationships;
 
-    public static final PropertyDescriptor CONNECTION_POOL = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor DBCP_SERVICE = new PropertyDescriptor.Builder()
             .name("dbcp-connection-pool")
-            .description("The Controller Service that is used to obtain connection to database").required(true)
+            .displayName("Database Connection Pooling Service")
+            .description("The Controller Service that is used to obtain connection to database")
+            .required(true)
             .identifiesControllerService(DBCPService.class).build();
 
     public static final PropertyDescriptor CTAS_SQL_EXPRESSION =
             new PropertyDescriptor.Builder()
                     .name("ctas-expression")
-                    .displayName("JCTAS Sql query")
+                    .displayName("CTAS SQL Queries")
                     .description("The SQL select query to execute.")
                     .expressionLanguageSupported(true)
                     .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -88,7 +90,7 @@ public class CTAS extends AbstractProcessor {
         relationships = Collections.unmodifiableSet(r);
 
         final List<PropertyDescriptor> pds = new ArrayList<>();
-        pds.add(CONNECTION_POOL);
+        pds.add(DBCP_SERVICE);
         pds.add(CTAS_SQL_EXPRESSION);
         pds.add(SQL_CTAS_TABLE);
         pds.add(QUERY_TIMEOUT);
@@ -129,7 +131,9 @@ public class CTAS extends AbstractProcessor {
 
         // CTAS implementation - here we go 
         final ComponentLog logger = getLogger();
-        final DBCPService dbcpService = context.getProperty(CONNECTION_POOL).asControllerService(DBCPService.class);
+        System.out.println("-----------");
+        System.out.println(context.toString());
+        final DBCPService dbcpService = context.getProperty(DBCP_SERVICE).asControllerService(DBCPService.class);
         final Integer queryTimeout = context.getProperty(QUERY_TIMEOUT).asTimePeriod(TimeUnit.SECONDS).intValue();
         final StopWatch stopWatch = new StopWatch(true);
 

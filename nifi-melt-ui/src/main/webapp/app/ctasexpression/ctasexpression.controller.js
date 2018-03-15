@@ -74,7 +74,6 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.populateScopeWithDetails(details.data);
 
     $scope.populateScopeWithDBInfos = function (dbDetails) {
-        console.log(dbDetails);
         if (dbDetails.status != 200) {
             console.log('foo');
             if (!$scope.databaseError) {
@@ -89,7 +88,6 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
                 );
             }
         } else {
-            console.log('bar');
             var data = dbDetails['data'];
             $scope.schemas = data.schemas;
             if ($scope.schemas != null && $scope.schemas.length > 0) {

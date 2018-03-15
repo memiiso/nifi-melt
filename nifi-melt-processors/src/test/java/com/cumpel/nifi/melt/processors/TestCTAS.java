@@ -70,7 +70,7 @@ public class TestCTAS {
 
 			testRunner.addControllerService("dbcp", service);
 	        testRunner.enableControllerService(service);
-	        testRunner.setProperty(CTAS.CONNECTION_POOL, "dbcp");
+	        testRunner.setProperty(CTAS.DBCP_SERVICE, "dbcp");
 	        //testRunner.setProperty(CTAS.SQL_CTAS_TABLE, "stg.stg_testctastable");
 	        //testRunner.setProperty(CTAS.SQL_CTAS_QUERY, "select current_date as currdatecoll, 123 as coll2 from dual");
 	        testRunner.setProperty(CTAS.QUERY_TIMEOUT, "0 seconds");
