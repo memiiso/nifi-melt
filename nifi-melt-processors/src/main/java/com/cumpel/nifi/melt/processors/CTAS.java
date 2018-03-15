@@ -56,7 +56,8 @@ public class CTAS extends AbstractProcessor {
             .description("SQL query execution failed. Incoming FlowFile will be penalized and routed to this relationship").build();
     private final Set<Relationship> relationships;
 
-    public static final PropertyDescriptor CONNECTION_POOL = new PropertyDescriptor.Builder().name("Database Connection Pooling Service")
+    public static final PropertyDescriptor CONNECTION_POOL = new PropertyDescriptor.Builder()
+            .name("dbcp-connection-pool")
             .description("The Controller Service that is used to obtain connection to database").required(true)
             .identifiesControllerService(DBCPService.class).build();
 

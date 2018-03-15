@@ -7,6 +7,8 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.revisionId = '';
     $scope.editable = false;
     $scope.ctasEditor = {};
+    $scope.databaseError = false;
+
     $scope.inputEditor = {};
     $scope.sortOutput = false;
     $scope.validObj = {};
@@ -24,6 +26,11 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     $scope.selectedSchema = '';
     $scope.selectedTable = '';
 
+    $scope.ten = Array.apply(null, {length: 10}).map(Number.call, Number);
+    $scope.fifteen = Array.apply(null, {length: 15}).map(Number.call, Number);
+
+    console.log($scope.ten);
+
     $scope.convertToArray = function (map) {
         var labelValueArray = [];
         angular.forEach(map, function (value, key) {
@@ -39,26 +46,59 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     console.log(databases);
 
     $scope.getCtasExpression = function (details) {
+
+        if (details['properties']['dbcp-connection-pool'] == null) {
+            if (!$scope.databaseError) {
+                $scope.databaseError = true;
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Database Error')
+                        .textContent('Could not connect to database: please configure the DBCPConnectionPool to obtain a connection to the database')
+                        .ariaLabel('Database Error')
+                        .ok('OK')
+                );
+            }
+        }
         if (details['properties']['ctas-expression'] != null && details['properties']['ctas-expression'] != "") {
             return details['properties']['ctas-expression'];
+        } else {
+            return '';
         }
-        else return '';
     };
 
-    $scope.populateScopeWithDetails = function (details) {
-        $scope.ctasExpression = $scope.getCtasExpression(details);
+    $scope.populateScopeWithDetails = function (detailsData) {
+        $scope.ctasExpression = $scope.getCtasExpression(detailsData);
     };
 
     $scope.populateScopeWithDetails(details.data);
 
-    $scope.populateScopeWithDBInfos = function (database) {
-        $scope.schemas = database.schemas;
-        if ($scope.schemas && $scope.schemas.length > 0) {
-            $scope.selectedSchema = $scope.schemas[0];
+    $scope.populateScopeWithDBInfos = function (dbDetails) {
+        console.log(dbDetails);
+        if (dbDetails.status != 200) {
+            console.log('foo');
+            if (!$scope.databaseError) {
+                $scope.databaseError = true;
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Database Error')
+                        .textContent('A fatal error occurred. Cannot load the database informations.')
+                        .ariaLabel('Database Error')
+                        .ok('OK')
+                );
+            }
+        } else {
+            console.log('bar');
+            var data = dbDetails['data'];
+            $scope.schemas = data.schemas;
+            if ($scope.schemas != null && $scope.schemas.length > 0) {
+                $scope.selectedSchema = $scope.schemas[0];
+            }
         }
     };
 
-    $scope.populateScopeWithDBInfos(databases.data);
+    $scope.populateScopeWithDBInfos(databases);
 
     $scope.clearValidation = function () {
         $scope.validObj = {};
@@ -101,33 +141,33 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
         $scope.initEditors(_editor);
         $scope.ctasEditor = _editor;
 
-        _editor.on('change',function(cm,changeObj){
+        _editor.on('change', function (cm, changeObj) {
             $scope.clearMessages();
         });
 
         _editor.clearGutter('CodeMirror-lint-markers');
-/*
-        _editor.on('update', function (cm) {
-            if ($scope.transform == 'jolt-transform-sort') {
-                $scope.toggleEditorErrors(_editor, 'hide');
-            }
-        });
+        /*
+                _editor.on('update', function (cm) {
+                    if ($scope.transform == 'jolt-transform-sort') {
+                        $scope.toggleEditorErrors(_editor, 'hide');
+                    }
+                });
 
-        _editor.on('change', function (cm, changeObj) {
-            if (!($scope.transform == 'jolt-transform-sort' && changeObj.text.toString() == "")) {
-                $scope.clearMessages();
-                if (changeObj.text.toString() != changeObj.removed.toString()) {
-                    $scope.specUpdated = true;
-                }
-            }
-        }); */
+                _editor.on('change', function (cm, changeObj) {
+                    if (!($scope.transform == 'jolt-transform-sort' && changeObj.text.toString() == "")) {
+                        $scope.clearMessages();
+                        if (changeObj.text.toString() != changeObj.removed.toString()) {
+                            $scope.specUpdated = true;
+                        }
+                    }
+                }); */
     };
 
     $scope.editorProperties = {
         indentWithTabs: true,
         smartIndent: true,
         lineNumbers: true,
-        matchBrackets : true,
+        matchBrackets: true,
         autofocus: true,
         extraKeys: {"Ctrl-Space": "autocomplete"},
         gutters: ['CodeMirror-lint-markers'],
@@ -183,16 +223,16 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
     };
 
     $scope.toggleEditor = function (editor, specUpdated) {
-/*
-        if (transform == 'jolt-transform-sort') {
-            editor.setOption("readOnly", "nocursor");
-            $scope.disableCSS = "trans";
-            $scope.toggleEditorErrors(editor, 'hide');
-        } else { */
-            editor.setOption("readOnly", false);
-            $scope.disableCSS = "";
-            $scope.toggleEditorErrors(editor, 'show');
-       // }
+        /*
+                if (transform == 'jolt-transform-sort') {
+                    editor.setOption("readOnly", "nocursor");
+                    $scope.disableCSS = "trans";
+                    $scope.toggleEditorErrors(editor, 'hide');
+                } else { */
+        editor.setOption("readOnly", false);
+        $scope.disableCSS = "";
+        $scope.toggleEditorErrors(editor, 'show');
+        // }
 
         $scope.specUpdated = specUpdated;
         $scope.clearMessages();
@@ -288,16 +328,16 @@ var CtasExpressionController = function ($scope, $state, $q, $mdDialog, $timeout
         $scope.revisionId = params.revision;
         $scope.editable = eval(params.editable);
 
-/*
-        var jsonSpec = $scope.getSpec($scope.transform, $scope.jsonSpec);
+        /*
+                var jsonSpec = $scope.getSpec($scope.transform, $scope.jsonSpec);
 
-        if (jsonSpec != null && jsonSpec != "") {
-            setTimeout(function () {
-                $scope.$apply(function () {
-                    $scope.validateJson($scope.jsonInput, jsonSpec, $scope.transform);
-                });
-            });
-        } */
+                if (jsonSpec != null && jsonSpec != "") {
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $scope.validateJson($scope.jsonInput, jsonSpec, $scope.transform);
+                        });
+                    });
+                } */
     };
 
     $scope.$watch("ctasEditor", function (newValue, oldValue) {

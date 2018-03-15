@@ -21,7 +21,7 @@ public class CtasDatabaseInformation {
 
     private static final Logger logger = LoggerFactory.getLogger(CtasDatabaseInformation.class);
     private static final int TABLE_COUNT = 18;
-    private static final int COLUMN_COUNT = 8;
+    private static final int COLUMN_COUNT = 28;
     private static final int SCHEMA_COUNT = 5;
 
     @GET
@@ -47,15 +47,15 @@ public class CtasDatabaseInformation {
         databaseDTO.addSchema(schemaDTO);
 
         for (int i = 0; i < SCHEMA_COUNT; i++) {
-            schemaDTO = new SchemaDTO(RandomStringUtils.randomAlphabetic(10,25));
+            schemaDTO = new SchemaDTO(RandomStringUtils.randomAlphabetic(10,55));
 
             TableDTO tableDTO1;
             for (int j = 0; j < TABLE_COUNT ; j++) {
-                tableDTO1 = new TableDTO(RandomStringUtils.randomAlphabetic(10,25));
+                tableDTO1 = new TableDTO(RandomStringUtils.randomAlphabetic(10,75));
 
                 ColumnDTO columnDTO;
                 for (int k = 0; k < COLUMN_COUNT; k++) {
-                    columnDTO  = new ColumnDTO(RandomStringUtils.randomAlphabetic(2,20), RandomStringUtils.randomAlphabetic(6,10));
+                    columnDTO  = new ColumnDTO(RandomStringUtils.randomAlphabetic(2,20), RandomStringUtils.randomAlphabetic(6,40));
                     tableDTO1.addColumn(columnDTO);
                 }
                 schemaDTO.addTable(tableDTO1);

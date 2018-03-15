@@ -17,7 +17,6 @@ div.code-mirror-editor.trans {
     text-transform: uppercase;
     padding-bottom: 8px;
     text-overflow: ellipsis;
-    float: left;
 }
 
 md-card {
@@ -206,7 +205,7 @@ md-option .md-text {
 }
 
 #table-definition-container {
-    height: 200px;
+    height: 100%;
     width: 100%;
     padding-left: 8px
 }
@@ -234,4 +233,30 @@ md-option .md-text {
 
 .cohocolate {
     color: #6B0707;
+}
+
+md-card {
+    display: flex;
+}
+.innerContent {
+    display: flex;
+    flex-direction: row;
+    height: 220px;
+}
+
+md-list {
+    overflow-y: auto;
+}
+
+.table-list md-list-item .md-button {
+    margin: 0 !important;
+    font-size: 12px;
+}
+
+.table-list md-list-item .md-list-item-inner {
+    min-height: 32px;
+}
+
+.full-height {
+    height: 100% !important;
 }
