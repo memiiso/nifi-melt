@@ -1,17 +1,19 @@
 'use strict';
 
-var MainController = function ($scope, $state, ProcessorService) {
+var MainController = function ($scope, $state, ProcessorService,$location) {
 
-    //Got to state wich has a same name with the processor
-    ProcessorService.getType($state.params.id).then(function(response){
-        var type = response.data; //com.cumpel.nifi.melt.processors.CTAS
-        var stateName = type.substring(type.lastIndexOf(".") + 1, type.length).toLowerCase(); //ctas
+    console.log("Main Controller");
+    //Got to state which has a same name with the processor
+    ProcessorService.getDetails().then(function(response){
+        var processorType = response.data.type; //com.memiiso.nifi.melt.processors.CTAS
+        var stateName = processorType.substring(processorType.lastIndexOf(".") + 1, processorType.length).toLowerCase(); //ctas
+        console.log("state.go : "+stateName);
         var result = $state.go(stateName,$state.params);
     }).catch(function(response) {
         $state.go('error');
     });
 };
 
-MainController.$inject = ['$scope','$state','ProcessorService'];
+MainController.$inject = ['$scope','$state','ProcessorService','$location'];
 
-angular.module('standardUI').controller('MainController', MainController);
+angular.module('meltStandardUI').controller('MainController', MainController);

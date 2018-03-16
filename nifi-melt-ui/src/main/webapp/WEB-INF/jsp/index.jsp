@@ -13,7 +13,7 @@
     <meta charset="utf-8"/>
 </head>
 
-<body ng-app="standardUI" ng-cloak>
+<body ng-app="meltStandardUI" ng-cloak>
 
 <!--Parent Libraries-->
 <script type="text/javascript" src="../nifi/assets/jsonlint/lib/jsonlint.js"></script>
@@ -42,21 +42,20 @@
 <!--Custom UI App-->
 <script type="text/javascript" src="app/app.js"></script>
 
-<!--Custom Global Components-->
-<script type="text/javascript" src="app/components/error/error.state.js"></script>
-<script type="text/javascript" src="app/components/processor/processor.service.js"></script>
-
 <!--Custom View Components-->
 <script type="text/javascript" src="app/main/main.state.js"></script>
 <script type="text/javascript" src="app/main/main.controller.js"></script>
-<script type="text/javascript" src="app/ctasexpression/ctasexpression.state.js"></script>
-<script type="text/javascript" src="app/ctasexpression/ctasexpression.controller.js"></script>
-<script type="text/javascript" src="app/ctasexpression/ctasexpression.service.js"></script>
-
+<!--Custom Global Components-->
+<script type="text/javascript" src="app/error/error.state.js"></script>
+<script type="text/javascript" src="app/processor/processor.service.js"></script>
+<!--Custom Processor Components-->
+<script type="text/javascript" src="app/processor/CTAS/CTAS.state.js"></script>
+<script type="text/javascript" src="app/processor/CTAS/CTAS.controller.js"></script>
+<script type="text/javascript" src="app/processor/MERGE/MERGE.state.js"></script>
+<script type="text/javascript" src="app/processor/MERGE/MERGE.controller.js"></script>
 
 <div ui-view id="mainView">
 
 </div>
-
 </body>
 </html>

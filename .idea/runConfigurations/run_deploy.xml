@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run_deploy" type="MavenRunConfiguration" factoryName="Maven">
+    <MavenSettings>
+      <option name="myGeneralSettings" />
+      <option name="myRunnerSettings" />
+      <option name="myRunnerParameters">
+        <MavenRunnerParameters>
+          <option name="profiles">
+            <set />
+          </option>
+          <option name="goals">
+            <list />
+          </option>
+          <option name="profilesMap">
+            <map />
+          </option>
+          <option name="resolveToWorkspace" value="false" />
+          <option name="workingDirPath" value="" />
+        </MavenRunnerParameters>
+      </option>
+    </MavenSettings>
+    <method>
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_run_deploy" />
+    </method>
+  </configuration>
+</component>

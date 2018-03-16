@@ -1,0 +1,10 @@
+language: java
+jdk:
+- oraclejdk8
+
+before_install:
+  - npm conf set strict-ssl false
+  
+install: true
+
+script: mvn clean package -DskipTests=true

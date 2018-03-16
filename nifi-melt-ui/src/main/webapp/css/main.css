@@ -2,6 +2,16 @@ body {
     font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
+.CodeMirror {
+    height:auto
+    min-height : 400px;
+}
+
+
+md-border {
+    border:1px solid #aaa;
+}
+
 div.code-mirror-editor.trans {
     opacity: 0.4;
     filter: alpha(opacity=40);
@@ -26,6 +36,7 @@ md-card {
 
 md-card md-card-title {
     padding: 1px 4px !important;
+    flex: 0;
 }
 
 md-card md-card-title md-card-title-text:only-child .md-subhead {
@@ -33,7 +44,7 @@ md-card md-card-title md-card-title-text:only-child .md-subhead {
 }
 
 md-card md-card-content {
-    padding: 0 4px !important;
+    padding: 0 0 !important;
 }
 
 md-list-item {

@@ -1,1 +1,2 @@
-com.cumpel.nifi.melt.processors.CTAS:${project.groupId}:nifi-melt-nar:${project.version}
+com.memiiso.nifi.melt.processors.CTAS:${project.groupId}:nifi-melt-nar:${project.version}
+com.memiiso.nifi.melt.processors.MERGE:${project.groupId}:nifi-melt-nar:${project.version}

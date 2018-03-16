@@ -1,0 +1,114 @@
+<!--
+  ~ Copyright (c) 2018. Memiiso
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  -->
+
+<div layout="column" class="full-height">
+    <!-- First Row-->
+    <div layout="row" layout class="full-height">
+        <!-- First Row First Column-->
+        <div flex="30" class="full-height" style="margin-right: 5px">
+            <div layout="column" class="full-height">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-subhead large-label">Schemas:</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card class="">
+                    <!-- First Row in First Column-->
+                    <md-card-content>
+                        <md-input-container>
+                            <md-select ng-model="selectedSchema" aria-label="Select a database"
+                                       class="md-no-underline">
+                                <md-option ng-repeat="schema in schemas" ng-value="schema">{{ schema.schemaName }}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </md-card-content>
+                    <!-- Second Rof in First Column-->
+                    <md-card-content id="table-list-definition-container">
+                        <md-tabs md-dynamic-height md-border-bottom>
+                            <md-tab label="Tables">
+                                <!--
+                                <md-virtual-repeat-container id="table-list-container">
+                                    <p ng-show="!tables.length" class="md-caption">No database selected</p>
+                                    <div md-virtual-repeat="table in tables" ng-click="selectTable(table)"
+                                         class="repeated-item" flex>
+                                        <p class="md-caption">{{table.name}}</p>
+                                    </div>
+                                </md-virtual-repeat-container>
+                                -->
+                                <div class="innerContent full-height">
+                                    <p ng-show="!selectedSchema" class="md-caption">No schema selected</p>
+                                    <md-list ng-show="selectedSchema" class="table-list ng-scope flex full-height">
+                                        <md-list-item ng-repeat="table in tables" ng-click="selectTable(table)">
+                                            {{table.tableName}}
+                                        </md-list-item>
+                                    </md-list>
+                                </div>
+                            </md-tab>
+                            <md-tab label="info">
+                                <md-content class="md-padding">
+                                    <p ng-show="!selectedSchema" class="md-caption">No schema selected</p>
+                                    <p ng-show="!selectedTable && selectedSchema" class="no-margin-bottom"><span
+                                            class="md-body-1">Schema:</span>&nbsp;<span
+                                            class="md-caption md-accent">{{selectedSchema.schemaName}}</span></p>
+                                    <div ng-show="selectedTable">
+                                        <p class="no-margin-bottom"><span class="md-body-1">Table:</span>&nbsp;<span
+                                                class="md-caption md-accent">{{selectedTable}}</span>
+                                        </p>
+                                        <p class="md-body-1 no-margin-bottom">Columns:</p>
+                                        <md-list class="table-list">
+                                            <md-list-item ng-repeat="column in columns"><span
+                                                    class="md-caption md-accent cohocolate">{{column.columnName}}:</span>&nbsp;<span
+                                                    class="md-caption md-accent">{{column.columnType}}</span>
+                                            </md-list-item>
+                                        </md-list>
+                                    </div>
+                                </md-content>
+                            </md-tab>
+                        </md-tabs>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+        <!-- First Row Second Column-->
+        <div flex>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-subhead large-label">CREATE TABLE AS:</span>
+                </md-card-title-text>
+            </md-card-title>
+            <div flex>
+                <div id="meltEditor" ui-refresh="true" ng-model="SourceSelect" ui-codemirror="editorProperties"
+                     class="code-mirror-editor {{disableCSS}}">
+                </div>
+            </div>
+            <div flex>
+                <div layout="row" layout-align="end center">
+                    <!--button class="secondary-button" ng-click="formatEditor(inputEditor)">Cancel</button-->
+                    <span ng-show="infoMessage" class="info">{{infoMessage}}</span>
+                    <span ng-show="errorMessage" class="error">{{errorMessage}}</span>
+
+                    <button class="primary-button" ng-click="formatEditor(meltEditor)">Format</button>
+                    <button class="primary-button" ng-click="validateSelect(SourceSelect)">Validate</button>
+                    <button class="primary-button" ng-click="runSelect(SourceSelect)">Run</button>
+                    <button class="primary-button" ng-click="saveSourceSelect(SourceSelect);showELT(SourceSelect)">Show ELT</button>
+                    <button class="primary-button" ng-click="saveSourceSelect(SourceSelect)">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Second Row -->
+    <div layout="row" layout class="" style="max-height: 30%;padding-bottom: 5px;">
+        <div flex>
+            <span class="md-subhead large-label">RESULTSET</span>
+            <div id="sampleResultset" ui-refresh="true" ng-model="" class="">DATA TABLE</div>
+        </div>
+    </div>
+</div>

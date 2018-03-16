@@ -1,7 +1,7 @@
 'use strict';
 
 var MainState = function($stateProvider) {
-
+    console.log("Main State");
     $stateProvider
         .state('main', {
             url: "/main?id&revision&clientId&editable",
@@ -11,4 +11,4 @@ var MainState = function($stateProvider) {
 
 MainState.$inject = ['$stateProvider'];
 
-angular.module('standardUI').config(MainState);
+angular.module('meltStandardUI').config(MainState);
